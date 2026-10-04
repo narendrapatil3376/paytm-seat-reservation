@@ -1,0 +1,65 @@
+services:
+
+  mysql:
+    image: mysql:8.4
+    container_name: seat-reservation-mysql
+
+    environment:
+      MYSQL_DATABASE: seat_reservation
+      MYSQL_USER: reservation_user
+      MYSQL_PASSWORD: reservation_password
+      MYSQL_ROOT_PASSWORD: root_password
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "reservation_user",
+          "-preservation_password"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: seat-reservation-app
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/seat_reservation?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+      SPRING_DATASOURCE_USERNAME: reservation_user
+      SPRING_DATASOURCE_PASSWORD: reservation_password
+
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION_MS: 3600000
+
+    restart: unless-stopped
+
+
+volumes:
+  mysql_data:

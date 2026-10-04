@@ -1,0 +1,24 @@
+package com.paytm.seatreservation.exception;
+
+public enum ErrorCode {
+
+    SHOW_NOT_FOUND,
+
+    SEAT_TAKEN,
+
+    INVALID_SEAT,
+
+    PER_USER_LIMIT,
+
+    IDEMPOTENCY_CONFLICT,
+
+    RESERVATION_NOT_FOUND,
+
+    NOT_RESERVATION_OWNER,
+
+    RESERVATION_ALREADY_CANCELLED,
+
+    CONCURRENCY_CONFLICT,
+
+    VALIDATION_ERROR
+}
