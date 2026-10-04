@@ -6,9 +6,9 @@ spring:
     name: seat-reservation
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/seat_reservation}
-    username: ${SPRING_DATASOURCE_USERNAME:root}
-    password: ${SPRING_DATASOURCE_PASSWORD:India@123}
+    url: jdbc:mysql://${MYSQLHOST}:${MYSQLPORT}/${MYSQLDATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+    username: ${MYSQLUSER}
+    password: ${MYSQLPASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
     hikari:
@@ -19,10 +19,9 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
-
+      ddl-auto: validate
     open-in-view: false
-
+    database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       hibernate:
         jdbc:
@@ -52,15 +51,9 @@ management:
       enabled: true
 
 jwt:
-  secret: "${JWT_SECRET:VGhpc0lzQVN1ZmZpY2llbnRMb25nU2VjcmV0S2V5Rm9ySldUMjU2}"
+  secret: ${JWT_SECRET}
   expiration-ms: ${JWT_EXPIRATION_MS:3600000}
 
 logging:
   pattern:
-    console: >
-      {"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}",
-      "level":"%p",
-      "thread":"%t",
-      "logger":"%logger",
-      "requestId":"%X{requestId}",
-      "message":"%m"}%n
+    console: '{"timestamp":"%d{yyyy-MM-dd''T''HH:mm:ss.SSSXXX}","level":"%p","thread":"%t","logger":"%logger","requestId":"%X{requestId}","message":"%m"}%n'
